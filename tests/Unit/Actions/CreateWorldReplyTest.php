@@ -28,10 +28,10 @@ it('answers an approved hello world once', function (): void {
 });
 
 it('answers when an admin commits hello world', function (): void {
-    config(['app.admins' => ['nunomaduro']]);
+    config(['app.admins' => ['1000000002']]);
 
     $commit = resolve(CreateCommit::class)->handle(
-        User::factory()->create(['username' => 'nunomaduro', 'name' => 'Nuno Maduro']),
+        User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000002', 'name' => 'Nuno Maduro']),
         'hello world',
     );
 

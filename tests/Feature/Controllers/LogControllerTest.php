@@ -519,9 +519,9 @@ it('offers the commits newer than a given one on top of the ranked log, newest f
 });
 
 it('offers the commit just committed on top of the ranked log', function (): void {
-    config(['app.admins' => ['nunomaduro']]);
+    config(['app.admins' => ['1000000002']]);
 
-    $user = User::factory()->create(['username' => 'nunomaduro']);
+    $user = User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000002']);
     $starred = Commit::factory()->create(['created_at' => now()->subHour()]);
     $starred->stars()->attach(User::factory()->create());
 

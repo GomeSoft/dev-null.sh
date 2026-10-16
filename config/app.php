@@ -37,15 +37,18 @@ return [
     | Application Admins
     |--------------------------------------------------------------------------
     |
-    | The GitHub usernames listed here are admins of the application, which
-    | allows them to moderate commits. Set them as a comma separated list
-    | in your ".env" file, for example: "ADMINS=nunomaduro,taylorotwell".
+    | The GitHub user IDs listed here are admins of the application, which
+    | allows them to moderate commits. IDs never change, while usernames
+    | can be renamed and claimed by someone else. Set them as a comma
+    | separated list in your ".env" file, for example:
+    | "ADMIN_GITHUB_IDS=583231,1234567". The ID of a GitHub user is the
+    | "id" field of https://api.github.com/users/{username}.
     |
     */
 
     'admins' => array_values(array_filter(array_map(
         trim(...),
-        explode(',', (string) env('ADMINS', '')),
+        explode(',', (string) env('ADMIN_GITHUB_IDS', '')),
     ))),
 
     /*

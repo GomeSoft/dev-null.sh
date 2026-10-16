@@ -1,0 +1,15 @@
+Deploy notes: admins identified by GitHub ID (branch fix/admins-by-github-id)
+
+Before deploying, update the production .env:
+
+  Remove:  ADMINS=<usernames>
+  Add:     ADMIN_GITHUB_IDS=<ids>
+
+Use a comma-separated list of GitHub user IDs. To find a user's ID, open
+https://api.github.com/users/{username} and read its "id" field.
+
+If this is not done, nobody will be an admin until the variable is set.
+This is intentional: the change fails closed instead of keeping the old
+username-based rule, which let anyone who claimed an admin's former GitHub
+username inherit admin rights. The variable was also renamed so that an
+outdated .env does not look correct.

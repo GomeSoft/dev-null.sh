@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Actions\UpdateStaleUsernames;
 use App\Models\Commit;
 use App\Models\SshKey;
 use App\Models\User;
@@ -154,11 +155,24 @@ it('has no password', function (): void {
     expect($user->getAuthPassword())->toBe('');
 });
 
-it('knows if it is an admin', function (): void {
-    config(['app.admins' => ['NunoMaduro']]);
+it('knows if it is an admin by its github id', function (): void {
+    config(['app.admins' => ['1000000002']]);
 
-    expect(User::factory()->create(['username' => 'nunomaduro'])->isAdmin())->toBeTrue()
+    expect(User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000002'])->isAdmin())->toBeTrue()
         ->and(User::factory()->create(['username' => 'octocat'])->isAdmin())->toBeFalse();
+});
+
+it('is not an admin for taking over the username of an admin', function (): void {
+    config(['app.admins' => ['1000000002']]);
+
+    $admin = User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000002']);
+
+    resolve(UpdateStaleUsernames::class)->handle('nunomaduro', '1000000003');
+    $impostor = User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000003']);
+
+    expect($impostor->isAdmin())->toBeFalse()
+        ->and($admin->fresh()?->username)->toBe('_renamed-1000000002')
+        ->and($admin->fresh()?->isAdmin())->toBeTrue();
 });
 
 it('has the same lane as the frontend', function (string $id, int $lane): void {

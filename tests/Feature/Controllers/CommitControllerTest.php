@@ -231,9 +231,9 @@ it('tells users their commit is pending review', function (): void {
 });
 
 it('publishes commits of admins right away', function (): void {
-    config(['app.admins' => ['nunomaduro']]);
+    config(['app.admins' => ['1000000002']]);
 
-    $user = User::factory()->create(['username' => 'nunomaduro']);
+    $user = User::factory()->create(['username' => 'nunomaduro', 'github_id' => '1000000002']);
 
     $response = $this->actingAs($user)
         ->fromRoute('log.show', Log::Following)

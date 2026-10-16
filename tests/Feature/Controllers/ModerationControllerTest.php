@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 beforeEach(function (): void {
-    config(['app.admins' => ['admin']]);
+    config(['app.admins' => ['1000000001']]);
 });
 
 it('renders pending commits oldest first', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
 
     Commit::factory()->pending()->create(['body' => 'Newer']);
     Commit::factory()->pending()->create(['body' => 'Older', 'created_at' => now()->subMinute()]);
@@ -38,7 +38,7 @@ it('renders pending commits oldest first', function (): void {
 });
 
 it('shows the ai decision on commits and their series parts', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $seriesId = Str::uuid7()->toString();
 
     $first = Commit::factory()->pending()->create([
@@ -80,7 +80,7 @@ it('keeps ai suggestions private and notifies the quoted author only after moder
         ]]]]),
     ]);
 
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $quoted = Commit::factory()->create([
         'ai_decision' => CommitStatus::Approved,
         'ai_categories' => ['private-quoted-category'],
@@ -126,7 +126,7 @@ it('keeps ai suggestions private and notifies the quoted author only after moder
 });
 
 it('drops deleted pending commits from the queue', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
 
     Commit::factory()->pending()->create(['body' => 'Kept']);
     Commit::factory()->pending()->create()->delete();
@@ -154,7 +154,7 @@ it('requires authentication', function (): void {
 });
 
 it('shows who a pending reply is replying to', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $parent = Commit::factory()->for(User::factory()->create(['username' => 'octocat']))->create();
     Commit::factory()->pending()->for($parent, 'parent')->create();
 
@@ -167,7 +167,7 @@ it('shows who a pending reply is replying to', function (): void {
 });
 
 it('shows what a pending quote is quoting', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $quoted = Commit::factory()->for(User::factory()->create(['username' => 'octocat']))->pending()->create(['body' => 'Quoted while pending']);
     Commit::factory()->pending()->for($quoted, 'quotedCommit')->create(['created_at' => now()->addMinute()]);
 
@@ -181,7 +181,7 @@ it('shows what a pending quote is quoting', function (): void {
 });
 
 it('includes the link previews of pending commits', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
 
     $linkPreview = LinkPreview::factory()->fetched()->create(['title' => 'Pending link']);
 
@@ -197,7 +197,7 @@ it('includes the link previews of pending commits', function (): void {
 });
 
 it('may approve many commits', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $commits = Commit::factory()->pending()->count(2)->create();
     $other = Commit::factory()->pending()->create();
 
@@ -217,7 +217,7 @@ it('may approve many commits', function (): void {
 });
 
 it('only approves commits that are still pending', function (): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
     $rejected = Commit::factory()->rejected()->create();
 
     $response = $this->actingAs($admin)
@@ -232,7 +232,7 @@ it('only approves commits that are still pending', function (): void {
 });
 
 it('requires valid commits', function (mixed $commits): void {
-    $admin = User::factory()->create(['username' => 'admin']);
+    $admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
 
     $response = $this->actingAs($admin)
         ->fromRoute('moderation.show')

@@ -10,9 +10,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
-    config(['app.admins' => ['admin']]);
+    config(['app.admins' => ['1000000001']]);
 
-    $this->admin = User::factory()->create(['username' => 'admin']);
+    $this->admin = User::factory()->create(['username' => 'admin', 'github_id' => '1000000001']);
 });
 
 it('lists a pending series once in the queue with the rest of its parts in order', function (): void {
